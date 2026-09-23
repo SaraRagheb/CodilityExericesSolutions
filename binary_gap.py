@@ -1,28 +1,38 @@
-# you can write to stdout for debugging purposes, e.g.
-# print("this is a debug message")
 
-def solution(N):
-    # Implement your solution here
-    counting = False
-    max_count = 0
-    curr_count = 0
-    div =  N 
-    while div > 0:
-        rem = div % 2
-        if rem == 1:
-            if counting:
-                if curr_count > max_count:
-                    max_count = curr_count    
-            counting = True
-            curr_count = 0  
-        elif counting:
-            curr_count += 1  
-        div = div // 2
 
-    return max_count
-    pass
+def solution(N : int) -> int:
+    """
+    Finds the maximum binary gap length for a given positive integer N.
+    
+    A binary gap is a sequence of consecutive zeros surrounded by ones 
+    at both ends in the binary representation of N.
+    """
+    max_gap_length = 0
+    current_gap_length = 0
+    is_inside_gap = False
 
+    quotient = N
+
+    while quotient > 0:
+        remainder = quotient % 2    
+
+        if remainder == 1:
+            if is_inside_gap:
+                if current_gap_length > max_gap_length:
+                    max_gap_length = current_gap_length
+
+            # Mark that a '1' was encountered and reset current count for the next potential gap
+            is_inside_gap = True
+            current_gap_length = 0
+
+        elif is_inside_gap:
+            # Increment zero count only if we are bounded by a preceding '1'
+            current_gap_length += 1
+        # Integer division by 2 to process the next bit
+        quotient = quotient // 2
+
+    return max_gap_length
 
 if __name__ == "__main__":
-    N = int(input().strip())
-    print(solution(N))
+    test_number = int(input().strip())
+    print(solution(test_number))
